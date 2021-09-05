@@ -1,0 +1,63 @@
+.carousel-slide{
+  background: linear-gradient(270deg, rgba(255, 255, 255, 0.555) 18.89%, rgba(228, 228, 228, 0.31) 21.36%, #FFFFFF 91.47%);
+  width: 100%;
+  height: 600px;
+  margin-top: 50px;
+}
+#carousel  {
+  touch-action: none;
+  display: flex;
+  height: 400px;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  
+}
+#drag-container,
+#spin-container {
+  position: relative;
+  display: flex;
+  margin: auto;
+  transform-style: preserve-3d;
+  transform: rotateX(359deg);
+  width: 100%;
+}
+.carousel-item img  {
+  transform-style: preserve-3d;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  transition: 0.5s ease;
+  
+}
+    
+#drag-container .carousel-item:hover img{
+  transform: scale(1.2);
+  cursor: pointer;
+}          
+
+#ground {
+  width: 900px;
+  height: 900px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateX(90deg);
+}
+@keyframes spin {
+  from {
+      transform: rotateY(0deg);
+  }
+  to {
+      transform: rotateY(360deg);
+  }
+}
+@keyframes spinRevert {
+  from {
+      transform: rotateY(360deg);
+  }
+  to {
+      transform: rotateY(0deg);
+  }
+}  

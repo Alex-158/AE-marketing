@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="./normalise.css">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="./style.css">
+    
+    <title>AE</title>
+</head>
+<body>
+    <section class="carousel-slide">
+        <div id="carousel">
+            <div id="drag-container">
+                <div id="spin-container">
+                    <div class="carousel-item"><img src="./image/T (2).png" alt=""></div>
+                    <div class="carousel-item"><img src="./image/T-540 (2).png" alt=""></div>
+                    <div class="carousel-item"><img src="./image/W (2).png" alt=""></div>
+                    <div class="carousel-item"><img src="./image/Y.png" alt=""></div>
+                    <div class="carousel-item"><img src="./image/Y.png" alt=""></div>
+                    <div class="carousel-item"><img src="./image/Y.png" alt=""></div>
+                    <div class="carousel-item"><img src="./image/Y.png" alt=""></div>
+                </div>
+            <div id="ground"></div>
+            </div>
+        </div>
+    </section>
+      
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        
+       
+<script>
+    let radius = 400; 
+    let autoRotate = true;
+    let rotateSpeed = -150; 
+    let imgWidth = 225; 
+    let imgHeight = 350;
+    setTimeout(init, 300);
+    let odrag = document.getElementById("drag-container");
+    let ospin = document.getElementById("spin-container");
+    let carousel = document.getElementById("carousel");
+    let aImg = ospin.getElementsByTagName("img");
+    ospin.style.width = imgWidth + "px";
+    ospin.style.height = imgHeight + "px";
+    let ground = document.getElementById("ground");
+    ground.style.width = radius * 3 + "px";
+    ground.style.height = radius * 3 + "px";
+    function init(delayTime) {
+        for (let i = 0; i < aImg.length; i++) {
+            aImg[i].style.transform =
+            "rotateY(" +
+            i * (360 / aImg.length) +
+            "deg)translateZ(" +
+            radius +
+            "px)";
+            aImg[i].style.transition = "transform 1s";
+            aImg[i].style.transitionDelay =
+            delayTime || (aImg.length - i) / 4 + "s";
+        }
+    }
+    function applyTranform(obj) {
+        if (tY > 180) tY = 180;
+        if (tY < 0) tY = 0;
+        obj.style.transform = " rotateY(" + tX + "deg)";
+    }
+    function playSpin(yes) {
+        ospin.style.animationPlayState = yes ? "running" : "paused";
+    }
+    let sX,
+    sY,
+    nX,
+    nY,
+    desX = 0,
+    desY = 0,
+    tX = 0,
+    tY = 10;
+    if (autoRotate) {
+        let animationName = rotateSpeed > 0 ? "spin" : "spinRevert";
+        ospin.style.animation = `${animationName} ${Math.abs(
+        rotateSpeed
+        )}s infinite linear`;
+    }
+    carousel.onpointerdown = function(e) {
+        clearInterval(odrag.timer);
+        e = e || window.event;
+        let sX = e.clientX,
+        sY = e.clientY;
+        this.onpointermove = function(e) {
+            e = e || window.event;
+            let nX = e.clientX,
+            nY = e.clientY;
+            desX = nX - sX;
+            desY = nY - sY;
+            tX += desX * 0.1;
+            tY += desY * 0.1;
+            applyTranform(odrag);
+            sX = nX;
+            sY = nY;
+        };
+        this.onpointerup = function(e) {
+            odrag.timer = setInterval(function() {
+                desX *= 0.95;
+                desY *= 0.95;
+                tX += desX * 0.1;
+                tY += desY * 0.1;
+                applyTranform(odrag);
+                playSpin(false);
+                if (Math.abs(desX) < 0.5 && Math.abs(desY) < 0.5) {
+                    clearInterval(odrag.timer);
+                    playSpin(true);
+             }
+            },  17);
+            this.onpointermove = this.onpointerup = null;
+        };
+        return false;
+    }; 
+        document.onmousewheel = function(e) {
+        e = e || window.event;
+        let d = e.wheelDelta / 20 || -e.detail;
+        radius += d;
+        init(1);
+        };  
+</script>
+    
+    
+</body>
+</html>
